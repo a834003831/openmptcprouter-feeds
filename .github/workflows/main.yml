@@ -1,77 +1,77 @@
-name: openmptcprouter
-on: [push]
+名字: openmptcrprouter
+在: [推]
 
-env:
-  REPO_URL: 'https://github.com/ysurac/openmptcprouter'
+包封/包围（动词包围的简写):
+回购_URL: https://github。' com/ysurac/openmptcrouter '
 
-jobs:
-  build:
-    strategy:
-      matrix:
-        OMR_TARGET: [bpi-r1, bpi-r2, bpi-r64, rpi2, rpi4, wrt32x, espressobin, r2s, rpi3, wrt3200acm, x86, x86_64, ubnt-erx, r4s, r7800, rutx12, rutx50, r5s, qnap-301w, rpi5, z8102ax_128m, z8102ax_64m]
-        OMR_KERNEL: [5.4, 6.6]
-    runs-on: ubuntu-latest
-    continue-on-error: true
+工作:
+建设:
+战略:
+矩阵:
+OMR _目标: r4s
+OMR内核: 6.6
+连续运行: Ubuntu-最新版
+出错时继续: 真实的
 
-    steps:
-    - name: Branch name
-      id: branch_name
-      run: |
-        echo "SOURCE_NAME=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
-        echo "SOURCE_BRANCH=${GITHUB_REF#refs/heads/}" >> $GITHUB_OUTPUT
-        echo "SOURCE_TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
-        echo "WORKSPACE=${GITHUB_WORKSPACE}" >> $GITHUB_OUTPUT
-    - name: Prepare
-      run: |
-        sudo apt-get update
-        sudo apt-get install build-essential asciidoc binutils bzip2 gawk gettext git libncurses5-dev libz-dev patch unzip zlib1g-dev lib32gcc-s1 libc6-dev-i386 subversion flex uglifyjs git-core gcc-multilib p7zip p7zip-full msmtp libssl-dev texinfo libglib2.0-dev xmlto qemu-utils upx libelf-dev autoconf automake libtool autopoint device-tree-compiler python3-pyelftools llvm clang
-    - if: matrix.OMR_KERNEL == '6.6'
-      name: Install LLVM
-      run: |
-        sudo apt-get install llvm clang
-    - name: Free disk space
-      run: |
-        df -h
-        sudo swapoff -a >/dev/null 2>&1 || true
-        sudo rm -f /swapfile >/dev/null 2>&1 || true
-        sudo apt-get autoremove -y >/dev/null 2>&1 || true
-        sudo apt-get autoclean -y >/dev/null 2>&1 || true
-        sudo rm -rf "/usr/local/share/boost" >/dev/null 2>&1 || true
-        sudo rm -rf "$AGENT_TOOLSDIRECTORY" >/dev/null 2>&1 || true
-        sudo rm -rf /usr/share/dotnet >/dev/null 2>&1 || true
-        sudo rm -rf /usr/local/lib/android >/dev/null 2>&1 || true
-        sudo rm -rf /opt/ghc >/dev/null 2>&1 || true
-        sudo docker rmi $(docker images -qf "dangling=true") >/dev/null 2>&1 || true
-        df -h
-    - name: Clone source code
-      working-directory: ../../
-      env: 
-        REPO_URL: https://github.com/ysurac/openmptcprouter
-        SOURCE_NAME: ${{ steps.branch_name.outputs.SOURCE_NAME }}
-        GITHUB_WORKSPACE: ${{ steps.branch_name.outputs.WORKSPACE }}
-      run: |
-        git clone $REPO_URL omr
-        if [ "$SOURCE_NAME" != "develop" ]; then
-          cd omr
-          pwd
-          git fetch
-          git checkout master
-        else
-          cd omr
-          git checkout develop
-        fi
-        git pull
-        pwd
-    - name: Build toolchain
-      working-directory: ../../omr
-      env:
-        OMR_FEED_URL: https://github.com/ysurac/openmptcprouter-feeds
-        SOURCE_NAME: ${{ steps.branch_name.outputs.SOURCE_NAME }}
-        OMR_TARGET: ${{ matrix.OMR_TARGET }}
-        OMR_KERNEL: ${{ matrix.OMR_KERNEL }}
-        OMR_HOST: ${{ secrets.OMR_HOST }}
-        OMR_PORT: ${{ secrets.OMR_PORT }}
-      run: |
+步伐:
+    - 名字: 分行名称
+身份证明(识别): 分支机构名称
+奔跑: |
+回声" SOURCE _ NAME = $ { GITHUB _ REF# refs/*/} "> > $ GITHUB _ OUTPUT
+回声" SOURCE _ BRANCH = $ { GITHUB _ REF # refs/heads/} "> > $ GITHUB _ OUTPUT
+回声" SOURCE _ TAG = $ { GITHUB _ REF # refs/tags/} "> > $ GITHUB _ OUTPUT
+回声" WORKSPACE = $ { GITHUB _ WORKSPACE } "> > $ GITHUB _ OUTPUT
+    - 名字: 准备
+奔跑: |
+sudo apt-get更新
+sudo apt-get install build-essential asciidoc binutils bzip2 gawk gettext git libncurses 5-dev libz-dev patch unzip zlib 1g-dev lib 32 gcc-S1 libc 6-dev-i386 subversion flex uglifyjs git-core gcc-multi lib p7zip p7zip-full msmtp libssl-dev texinfo libglib 2.0-dev xmlto QEMU-utils upx libelf-dev automake libtool autopoint device-tree-compiler python 3-compiler
+    - 如果: 矩阵OMR _内核=='6.6'
+名字: 安装LLVM
+奔跑: |
+sudo apt-get安装llvm clang
+    - 名字: 可用磁盘空间
+奔跑: |
+东风-h
+sudo swapoff-a >/dev/null 2 > & 1 | | true
+sudo RM-f/交换文件>/dev/null 2 > & 1 | | true
+sudo apt-get autoremove-y >/dev/null 2 > & 1 | | true
+sudo apt-get auto clean-y >/dev/null 2 > & 1 | | true
+sudo RM-RF"/usr/local/share/boost ">/dev/null 2 > & 1 | | true
+sudo RM-RF" $ AGENT _ tools目录">/dev/null 2 > & 1 | | true
+sudo RM-RF/usr/share/dot net >/dev/null 2 > & 1 | | true
+sudo RM-RF/usr/local/lib/Android >/dev/null 2 > & 1 | | true
+sudo RM-RF/opt/ghc >/dev/null 2 > & 1 | | true
+sudo docker RMI $(docker图片-qf"悬空=真")>/dev/null 2 > & 1 | | true
+东风-h
+    - 名字: 克隆源代码
+工作目录: ../../
+包封/包围（动词包围的简写): 
+回购_URL: https://github。com/y surac/openmptcrouter
+来源名称: ${{步骤。分支名称。输出。来源名称}}
+GITHUB_WORKSPACE: ${{步骤。分支名称。输出。工作空间}}
+奔跑: |
+饭桶克隆$REPO_URL omr
+如果[ " $SOURCE_NAME "！= "开发"]；然后
+光盘只读存储器
+显示当前工作目录
+获取饭桶
+饭桶结账大师
+其他
+光盘只读存储器
+饭桶检验开发
+船方不负担装货费用
+git拉
+显示当前工作目录
+    - 名字: 构建工具链
+工作目录: ../../omr
+包封/包围（动词envelop的简写）:
+OMR _供稿_网址: https://github . com/y surac/openmptcrouter-feeds
+来源名称: ${{步骤.分支名称.输出.来源名称}}
+OMR _目标: ${{矩阵。OMR _目标}}
+OMR内核: ${{矩阵。OMR内核}}
+OMR _主持人: ${{秘密。OMR _主持人}}
+OMR港: ${{秘密。OMR港}}
+奔跑: |
         OMR_KERNEL="${OMR_KERNEL}" OMR_FEED_SRC="${SOURCE_NAME}" sh build.sh prepare {tools,toolchain}/install -j$(nproc) || OMR_KERNEL="${OMR_KERNEL}" OMR_FEED_SRC="${SOURCE_NAME}" sh build.sh prepare {tools,toolchain}/install -j1 V=s
         #echo -e "${{ secrets.OMR_PRIVKEY }}" > $OMR_TARGET/$OMR_KERNEL/source/key-build
         #echo -e "${{ secrets.OMR_PUBKEY }}" > $OMR_TARGET/$OMR_KERNEL/source/key-build.pub
